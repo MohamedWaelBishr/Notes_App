@@ -116,7 +116,7 @@ export default function CustomDrawer({ toggleMode }) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Mini variant drawer
+            The Craziest Note App
           </Typography>
         </Toolbar>
       </AppBar>

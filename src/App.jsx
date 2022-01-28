@@ -15,14 +15,16 @@ function MyApp() {
 }
 
 export default function ToggleColorMode() {
-  const [mode, setMode] = React.useState('light');
+  const [mode, setMode] = React.useState(localStorage.getItem("Mode") || 'light');
+ 
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
         setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+        localStorage.setItem("Mode", mode === "light" ? "dark" : "light");
       },
     }),
-    [],
+    [mode],
   );
 
   const theme = React.useMemo(
