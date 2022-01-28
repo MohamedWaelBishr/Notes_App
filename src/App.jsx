@@ -1,27 +1,45 @@
-import {
-  Container,
-  useDisclosure,
-  Button,
-  ButtonGroup,
-  Box,
-  HStack,
-} from "@chakra-ui/react";
-import SideBar from "./components/SideBar/SideBar";
 import "./styles.css";
 import CustomDrawer from "./components/CustomDrawer";
-import { ArrowRightIcon } from "@chakra-ui/icons";
+import * as React from "react";
 
-function App() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
 
+const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+
+function MyApp() {
+  const theme = useTheme();
+  const colorMode = React.useContext(ColorModeContext);
   return (
-    <>
-      <Box style={{display:"flex"}} alignItems="center" backgroundColor="gray.500" height="100vh" width="20px" colorScheme="gray" onClick={onOpen}>
-        <ArrowRightIcon/>
-      </Box>
-      <CustomDrawer isOpen={isOpen} onClose={onClose} />
-    </>
+      <CustomDrawer toggleMode = {colorMode.toggleColorMode}/>
   );
 }
 
-export default App;
+export default function ToggleColorMode() {
+  const [mode, setMode] = React.useState('light');
+  const colorMode = React.useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+      },
+    }),
+    [],
+  );
+
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode],
+  );
+
+  return (
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
+        <MyApp />
+      </ThemeProvider>
+    </ColorModeContext.Provider>
+  );
+}

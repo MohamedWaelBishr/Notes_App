@@ -1,16 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import { ChakraProvider } from '@chakra-ui/react'
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
-ReactDOM.render(
-   <ChakraProvider>
-      <App />
-    </ChakraProvider>,
-  document.getElementById('root')
-);
-
+ReactDOM.render(<App />, document.getElementById("root"));
 
 serviceWorkerRegistration.register();
-
