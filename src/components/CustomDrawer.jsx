@@ -18,12 +18,16 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import SettingsIcon from "@mui/icons-material/Settings";
+import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 import SettingsModal from "./SettingsModal";
 import { grey } from "@mui/material/colors";
 import { Grid, Paper } from "@mui/material";
 import { Item } from "./Item";
 import { DrawerHeader } from './DrawerHeader';
 import DrawerBody from './DrawerBody';
+import ReadingList from "./ReadingList";
+import { useHistory } from "react-router-dom";
+import NoteAddIcon from "@mui/icons-material/NoteAdd";
 
 const drawerWidth = 240;
 
@@ -87,6 +91,25 @@ export default function CustomDrawer({ toggleMode }) {
   const [settingsDialog, setSettingsDialiog] = React.useState(false);
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  let History = useHistory();
+
+  // handle what happens on key press
+  const handleKeyPress = React.useCallback((event) => {
+    // console.log(`Key pressed: ${event.key}`);
+    if(event.key === "F2"){
+      setSettingsDialiog(true)
+    }
+  }, []);
+
+  React.useEffect(() => {
+    // attach the event listener
+    document.addEventListener("keydown", handleKeyPress);
+
+    // remove the event listener
+    // return () => {
+    //   document.removeEventListener("keydown", handleKeyPress);
+    // };
+  }, [handleKeyPress]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -95,8 +118,6 @@ export default function CustomDrawer({ toggleMode }) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
-
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -132,6 +153,30 @@ export default function CustomDrawer({ toggleMode }) {
         </DrawerHeader>
         <Divider />
         <List>
+          <ListItem
+            button
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = "/";
+            }}
+          >
+            <ListItemIcon>
+              <NoteAddIcon />
+            </ListItemIcon>
+            <ListItemText primary="Notes" />
+          </ListItem>
+          <ListItem
+            button
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = "/readinglist";
+            }}
+          >
+            <ListItemIcon>
+              <BookmarkAddIcon />
+            </ListItemIcon>
+            <ListItemText primary="Bookmarks" />
+          </ListItem>
           <ListItem button onClick={() => setSettingsDialiog(!settingsDialog)}>
             <ListItemIcon>
               <SettingsIcon />
@@ -141,11 +186,18 @@ export default function CustomDrawer({ toggleMode }) {
         </List>
         <Divider />
       </Drawer>
-      <DrawerBody />
+
+      {window.location.pathname == "/" ? (
+        <DrawerBody theme={theme} />
+      ) : (
+        <ReadingList theme={theme} />
+      )}
+
       <SettingsModal
         show={settingsDialog}
         setShow={setSettingsDialiog}
         mode={toggleMode}
+        theme={theme}
       />
     </Box>
   );

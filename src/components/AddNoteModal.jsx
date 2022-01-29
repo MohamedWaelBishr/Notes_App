@@ -9,17 +9,24 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 
 
-export default function AddNodeModal({ show, setShow, notes, setNotes }) {
+export default function AddNoteModal({ show, setShow, notes, setNotes }) {
   const [newNote, setNewNote] = React.useState("");
   const [newNoteTitle, setNewNoteTitle] = React.useState("");
 
   const handleClose = () => {
+    setNewNote("");
     setShow(false);
+    setNewNoteTitle("");
   };
 
   const addNewNote = (e) => {
     e.preventDefault();
     setNotes([[newNoteTitle, newNote], ...notes]);
+    localStorage.setItem(
+      "Notes",
+      JSON.stringify([[newNoteTitle, newNote], ...JSON.parse(localStorage.getItem('Notes'))])
+    );
+
     setNewNote("");
     setShow(false);
     setNewNoteTitle("");
@@ -46,35 +53,45 @@ export default function AddNodeModal({ show, setShow, notes, setNotes }) {
     >
       <DialogTitle>Add New Note</DialogTitle>
       <DialogContent>
-        <DialogContentText>
+        <DialogContentText style={{ marginBottom: "10px" }}>
           Fill The Next Input Fields To Add New Note.
         </DialogContentText>
-        <DialogContent style={{ width: "100%" }}>
-          <TextField
-            style={{ width: "100%" }}
-            placeholder="write note title"
-            variant="standard"
-            required={true}
-            value={newNoteTitle}
-            onChange={updateNewNoteTitle}
-          />
-        </DialogContent>
+
+        <TextField
+          style={{ width: "100%", marginBottom: "10px" }}
+          placeholder="write note title"
+          variant="filled"
+          color={newNoteTitle ? "success" : "primary"}
+          required={true}
+          label="Note Title"
+          fullWidth
+          value={newNoteTitle}
+          onChange={updateNewNoteTitle}
+        />
 
         <TextField
           style={{ width: "100%" }}
           id="outlined-multiline-static"
-          label="Note"
+          label="Note Content"
           multiline
           rows={4}
           placeholder="write note content"
-          variant="standard"
+          variant="filled"
+          color={newNote ? "success" : "primary"}
           required={true}
           value={newNote}
-          onChange={ updateNewNoteContent}
+          fullWidth
+          onChange={updateNewNoteContent}
         />
       </DialogContent>
       <DialogContent>
-        <Button onClick={addNewNote}>Add</Button>
+        <Button
+          color="success"
+          disabled={newNote && newNoteTitle ? false : true}
+          onClick={addNewNote}
+        >
+          Add
+        </Button>
       </DialogContent>
     </Dialog>
   );

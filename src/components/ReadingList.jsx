@@ -6,22 +6,18 @@ import TextField from "@mui/material/TextField";
 import AddNoteModal from "./AddNoteModal";
 import Swal from "sweetalert2";
 import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
+import AddBookModal from "./AddBookModal";
 
-const DrawerBody = ({ theme }) => {
-  const [notes, setNotes] = useState(
-    JSON.parse(localStorage.getItem("Notes")) || []
-  );
-  const [newNote, setNewNote] = useState("");
-  const [noteModal, setNoteModal] = useState(false);
-
-  const addNewNote = () => {
-    localStorage.setItem("Notes", JSON.stringify(notes));
-  };
+const ReadingList = ({ theme }) => {
+    // debugger
+  const [books, setBooks] = useState(JSON.parse(localStorage.getItem("Books")));
+  const [bookModal, setBookModal] = useState(false);
+  const [seeMore , setSeeMore] = useState(false)
 
   const ConfirmDelete = (ID) => {
     console.log(`ID => `, ID);
     Swal.fire({
-      title: "Are you sure you want to delete this note?",
+      title: "Are you sure you want to delete this bookmark?",
       text: "You won't be able to revert this!",
       icon: "warning",
       background: theme.palette.mode === "dark" ? "#353535" : "fff",
@@ -32,12 +28,12 @@ const DrawerBody = ({ theme }) => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        setNotes(notes.filter((note, index) => index !== ID));
-        let n = JSON.parse(localStorage.getItem("Notes")).filter(
-          (note, index) => index !== ID
+        setBooks(books.filter((book, index) => index !== ID));
+        let n = JSON.parse(localStorage.getItem("Books")).filter(
+          (book, index) => index !== ID
         );
-        localStorage.setItem("Notes", JSON.stringify(n));
-        Swal.fire("Deleted!", "Note has been deleted.", "success");
+        localStorage.setItem("Books", JSON.stringify(n));
+        Swal.fire("Deleted!", "Bookmark has been deleted.", "success");
       }
     });
   };
@@ -53,25 +49,27 @@ const DrawerBody = ({ theme }) => {
       <DrawerHeader />
       <Grid
         container
-        height="calc(100vh - 104px)"
+        // height="calc(100vh - 104px)"
         rowSpacing={1}
         columnSpacing={{ xs: 1, sm: 2, md: 3 }}
       >
-        {notes.map((note, index) => (
+        {books.map((book, index) => (
           <Grid
-            style={{ maxWidth: "578px", maxHeight: "290px" }}
             item
             xs={12}
             sm={6}
             md={4}
             key={index}
+            style={{ maxWidth: "578px", maxHeight: "290px" }}
           >
             <Item
               style={{
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "flex-start",
+                cursor: "pointer",
               }}
+              onClick={() => window.open(book[1])}
             >
               <div style={{ position: "relative", padding: "20px" }}>
                 <span
@@ -96,44 +94,56 @@ const DrawerBody = ({ theme }) => {
                   </div>
                 </span>
                 <span>
-                  <h1>{note[0]}</h1>
+                  <h1>
+                    <div
+                      style={{
+                        display: "block",
+                        maxWidth: "500px",
+                        maxHeight: "290px",
+                      }}
+                    >
+                      {book[0]} <br />
+                      {/* {book[1]} */}
+                    </div>
+                  </h1>
                 </span>
               </div>
-              <span style={{ overflow: "auto" }}>{note[1]}</span>
+              {/* <span style={{ overflow: "auto" }}>{book[1]}</span> */}
             </Item>
           </Grid>
         ))}
         <Grid
-          style={{ maxWidth: "578px", maxHeight: "290px", cursor: "pointer" }}
+          style={{ maxWidth: "578px", maxHeight: "290px" }}
           item
           xs={12}
           sm={6}
           md={4}
-          onClick={() => setNoteModal(!noteModal)}
         >
           <Item
+            onClick={() => setBookModal(!bookModal)}
             style={{
               textAlign: "center",
               alignItems: "center",
               alignContent: "center",
               display: "flex",
               justifyContent: "center",
+              cursor: "pointer",
             }}
           >
-            <h1> + Add New Note</h1>
+            <h1> + Add New Bookmark</h1>
             {/* <Button onClick={() => setNoteModal(!noteModal)}>Show</Button> */}
           </Item>
         </Grid>
       </Grid>
 
-      <AddNoteModal
-        show={noteModal}
-        setShow={setNoteModal}
-        notes={notes}
-        setNotes={setNotes}
+      <AddBookModal
+        show={bookModal}
+        setShow={setBookModal}
+        books={books}
+        setBooks={setBooks}
       />
     </Box>
   );
 };
 
-export default DrawerBody;
+export default ReadingList;

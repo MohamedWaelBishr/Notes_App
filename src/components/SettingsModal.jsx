@@ -8,23 +8,26 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
+
 
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 
-export default function SettingsModal({ show, setShow, mode }) {
+export default function SettingsModal({ show, setShow, mode ,theme}) {
   const handleClose = () => {
     setShow(false);
   };
 
   return (
     <Dialog open={show} onClose={handleClose}>
-      <DialogTitle>Subscribe</DialogTitle>
+      <DialogTitle>Settings</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          To subscribe to this website, please enter your email address here. We
-          will send updates occasionally.
+        <DialogContentText style={{ marginBottom: "10px" }}>
+          Notes App Settings
         </DialogContentText>
-        <TextField
+        {/* <TextField
           autoFocus
           margin="dense"
           id="name"
@@ -32,22 +35,31 @@ export default function SettingsModal({ show, setShow, mode }) {
           type="email"
           fullWidth
           variant="standard"
-        />
+        /> */}
         <Box
           sx={{
             display: "flex",
             width: "100%",
-            alignItems: "center",
-            justifyContent: "center",
             bgcolor: "background.default",
             color: "text.primary",
             borderRadius: 1,
             p: 3,
           }}
         >
-          <IconButton sx={{ ml: 1 }} onClick={mode} color="inherit">
-            <Brightness4Icon />
-          </IconButton>
+          <h1>
+            <FormGroup>
+              Activate Dark Mode
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={theme.palette.mode !== "light"}
+                    onChange={mode}
+                  />
+                }
+                label={theme.palette.mode !== "light" ? "On" : "Off"}
+              />
+            </FormGroup>
+          </h1>
         </Box>
       </DialogContent>
     </Dialog>
