@@ -10,7 +10,7 @@ import AddBookModal from "./AddBookModal";
 
 const ReadingList = ({ theme }) => {
     // debugger
-  const [books, setBooks] = useState(JSON.parse(localStorage.getItem("Books")));
+  const [books, setBooks] = useState(JSON.parse(localStorage.getItem("Books"))||[]);
   const [bookModal, setBookModal] = useState(false);
   const [seeMore , setSeeMore] = useState(false)
 

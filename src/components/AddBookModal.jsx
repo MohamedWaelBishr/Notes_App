@@ -34,7 +34,7 @@ export default function AddBookModal({ show, setShow, books, setBooks }) {
         "Books",
         JSON.stringify([
           [newBookTitle, tmp != "" ? tmp : newBook],
-          ...JSON.parse(localStorage.getItem("Books")),
+          ...(JSON.parse(localStorage.getItem("Books"))||[]),
         ])
       );
       setNewBook("");
